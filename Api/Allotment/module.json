@@ -1,0 +1,16 @@
+{
+    "name": "Allotment",
+    "alias": "allotment",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Api\\Allotment\\Providers\\AllotmentServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

@@ -1,0 +1,15 @@
+{
+    "name": "rapide/allotment",
+    "description": "",
+    "authors": [
+        {
+            "name": "Peter Mein",
+            "email": "peter@rapide.nl"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Api\\Allotment\\": ""
+        }
+    }
+}
