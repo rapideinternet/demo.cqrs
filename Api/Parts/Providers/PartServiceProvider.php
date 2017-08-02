@@ -3,10 +3,9 @@
 use Api\Parts\Commands\Handlers\PartCommandHandler;
 use Api\Parts\Console\ReplayPartsCommand;
 use Api\Parts\ReadModel\PartsThatWereManufacturedProjector;
-use Api\Parts\Repositories\ElasticSearchReadModelPartRepository;
-use Api\Parts\Repositories\MysqlEventStorePartRepository;
+use Api\Parts\Repositories\Elasticsearch\ElasticSearchReadModelPartRepository;
+use Api\Parts\Repositories\Mysql\EventStorePartRepository;
 use Elasticsearch\Client;
-use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 
@@ -47,7 +46,7 @@ class PartServiceProvider extends ServiceProvider
             $eventStore = $app[\Broadway\EventStore\EventStore::class];
             $eventBus = $app[\Broadway\EventHandling\EventBus::class];
 
-            return new MysqlEventStorePartRepository($eventStore, $eventBus, $app[\Doctrine\DBAL\Connection::class]);
+            return new EventStorePartRepository($eventStore, $eventBus, $app[\Doctrine\DBAL\Connection::class]);
         });
     }
 
@@ -85,23 +84,6 @@ class PartServiceProvider extends ServiceProvider
         $this->app['laravelbroadway.event.registry']->subscribe([
             $partsThatWereManfacturedProjector
         ]);
-    }
-
-
-    /**
-     * Register the filters.
-     *
-     * @param  Router $router
-     * @return void
-     */
-    public function registerMiddleware(Router $router)
-    {
-        foreach ($this->middleware as $module => $middlewares) {
-            foreach ($middlewares as $name => $middleware) {
-                $class = "Modules\\{$module}\\Http\\Middleware\\{$middleware}";
-                $router->middleware($name, $class);
-            }
-        }
     }
 
     private function registerConsoleCommands()

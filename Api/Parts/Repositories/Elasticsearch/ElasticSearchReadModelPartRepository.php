@@ -1,6 +1,7 @@
-<?php namespace Api\Parts\Repositories;
+<?php namespace Api\Parts\Repositories\Elasticsearch;
 
 use Api\Parts\ReadModel\PartsThatWereManufactured;
+use Api\Parts\Repositories\ReadModelPartRepository;
 use Broadway\ReadModel\ElasticSearch\ElasticSearchRepository;
 use Broadway\Serializer\Serializer;
 use Elasticsearch\Client;

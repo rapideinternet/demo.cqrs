@@ -4,17 +4,17 @@ use Api\Parts\Commands\ManufacturePartCommand;
 use Api\Parts\Commands\RemovePartCommand;
 use Api\Parts\Commands\RenameManufacturerForPartCommand;
 use Api\Parts\Entities\Part;
-use Api\Parts\Repositories\MysqlEventStorePartRepository;
+use Api\Parts\Repositories\EventStorePartRepository;
 use Broadway\CommandHandling\SimpleCommandHandler;
 
 class PartCommandHandler extends SimpleCommandHandler
 {
     /**
-     * @var MysqlEventStorePartRepository
+     * @var EventStorePartRepository
      */
     private $repository;
 
-    public function __construct(MysqlEventStorePartRepository $repository)
+    public function __construct(EventStorePartRepository $repository)
     {
         $this->repository = $repository;
     }
@@ -28,7 +28,7 @@ class PartCommandHandler extends SimpleCommandHandler
     {
         $part = Part::manufacture($command->partId, $command->manufacturerId, $command->manufacturerName);
         $this->repository->save($part);
-        }
+    }
 
     /**
      * An existing part aggregate root is loaded and renameManufacturerTo() is
@@ -38,6 +38,7 @@ class PartCommandHandler extends SimpleCommandHandler
      */
     protected function handleRenameManufacturerForPartCommand(RenameManufacturerForPartCommand $command)
     {
+        /** @var Part $part */
         $part = $this->repository->load($command->partId);
         $part->renameManufacturer($command->manufacturerName);
         $this->repository->save($part);
@@ -45,6 +46,7 @@ class PartCommandHandler extends SimpleCommandHandler
 
     protected function handleRemovePartCommand(RemovePartCommand $command)
     {
+        /** @var Part $part */
         $part = $this->repository->load($command->partId);
         $part->remove();
         $this->repository->save($part);

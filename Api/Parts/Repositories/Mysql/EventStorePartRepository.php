@@ -1,4 +1,4 @@
-<?php namespace Api\Parts\Repositories;
+<?php namespace Api\Parts\Repositories\Mysql;
 
 use Api\Parts\Entities\Part;
 use Broadway\Domain\DomainEventStream;
@@ -8,7 +8,7 @@ use Broadway\EventSourcing\EventSourcingRepository;
 use Broadway\EventStore\EventStore;
 use Doctrine\DBAL\Connection;
 
-class MysqlEventStorePartRepository extends EventSourcingRepository implements EventStorePartRepository
+class EventStorePartRepository extends EventSourcingRepository implements \Api\Parts\Repositories\EventStorePartRepository
 {
     /**
      * @var EventStore

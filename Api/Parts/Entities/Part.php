@@ -6,7 +6,14 @@ use Api\Parts\Events\PartWasRemovedEvent;
 
 class Part extends EventSourcedAggregateRoot
 {
+    /**
+     * @var PartId
+     */
     private $partId;
+
+    /**
+     * @var Manufacturer
+     */
     private $manufacturer;
 
     /**
