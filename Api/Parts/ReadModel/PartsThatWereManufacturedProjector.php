@@ -26,7 +26,11 @@ class PartsThatWereManufacturedProjector extends Projector
         try {
             $readModel = $this->getReadModel($event->partId);
         } catch (\Exception $e) {
-            $readModel = new PartsThatWereManufactured($event->partId->toString(), $event->manufacturerName);
+            $readModel = new PartsThatWereManufactured(
+                $event->partId->toString(),
+                $event->manufacturerName,
+                $event->manufacturerId
+            );
         }
 
         $this->repository->save($readModel);
@@ -34,8 +38,6 @@ class PartsThatWereManufacturedProjector extends Projector
 
     public function applyPartManufacturerWasRenamedEvent(PartManufacturerWasRenamedEvent $event, DomainMessage $domainMessage)
     {
-        $metaData = $domainMessage->getMetadata()->serialize();
-
         $readModel = $this->getReadModel($event->partId);
 
         $readModel->renameManufacturer($event->manufacturerName);

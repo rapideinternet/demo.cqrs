@@ -47,6 +47,7 @@ class PartsController extends Controller
     public function index()
     {
         $parts = $this->readModelPartRepository->findAll();
+        dd($parts);
 
         return view('parts::index', compact('parts'));
     }
@@ -92,7 +93,8 @@ class PartsController extends Controller
         return Redirect::route('parts.index')->with('success', 'Part successfully deleted.');
     }
 
-    public function replay(){
+    public function replay()
+    {
         $eventBus = new SimpleEventBus();
 
         $events = [];

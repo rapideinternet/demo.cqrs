@@ -13,10 +13,16 @@ class PartsThatWereManufactured implements SerializableReadModel
      */
     public $manufacturerName;
 
-    public function __construct($manufacturedPartId, $manufacturerName)
+    /**
+     * @var int
+     */
+    public $manufacturerId;
+
+    public function __construct($manufacturedPartId, $manufacturerName, $manufacturerId)
     {
         $this->manufacturedPartId = $manufacturedPartId;
         $this->manufacturerName = $manufacturerName;
+        $this->manufacturerId = $manufacturerId;
     }
 
     /**
@@ -38,7 +44,11 @@ class PartsThatWereManufactured implements SerializableReadModel
      */
     public static function deserialize(array $data)
     {
-        return new self($data['manufacturedPartId'], $data['manufacturerName']);
+        return new self(
+            $data['manufacturedPartId'],
+            $data['manufacturerName'],
+            $data['manufacturerId']
+        );
     }
 
     /**
@@ -48,7 +58,9 @@ class PartsThatWereManufactured implements SerializableReadModel
     {
         return [
             'manufacturedPartId' => $this->manufacturedPartId,
-            'manufacturerName' => $this->manufacturerName
+            'manufacturerName' => $this->manufacturerName,
+            'manufacturerId' => $this->manufacturerId
+
         ];
     }
 }
