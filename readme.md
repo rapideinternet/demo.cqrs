@@ -9,6 +9,10 @@ For this project we use homestead to setup our development environment. It has b
 
 ### Project
 
+Clone this project with is subrepositories
+
+    git clone https://github.com/rapideinternet/demo.cqrs --recurse-submodules
+
 Run composer install (broken till package is updated)
     
     composer install
