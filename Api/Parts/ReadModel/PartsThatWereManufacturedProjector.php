@@ -29,14 +29,17 @@ class PartsThatWereManufacturedProjector extends Projector
             $readModel = new PartsThatWereManufactured(
                 $event->partId->toString(),
                 $event->manufacturerName,
-                $event->manufacturerId
+                $event->manufacturerId->toString()
             );
         }
 
         $this->repository->save($readModel);
     }
 
-    public function applyPartManufacturerWasRenamedEvent(PartManufacturerWasRenamedEvent $event, DomainMessage $domainMessage)
+    public function applyPartManufacturerWasRenamedEvent(
+        PartManufacturerWasRenamedEvent $event,
+        DomainMessage $domainMessage
+    )
     {
         $readModel = $this->getReadModel($event->partId);
 

@@ -1,5 +1,6 @@
 <?php namespace Api\Parts\Events;
 
+use Api\Parts\Entities\ManufacturerId;
 use Api\Parts\Entities\PartId;
 use Broadway\Serializer\Serializable;
 
@@ -9,7 +10,7 @@ class PartWasManufacturedEvent implements Serializable
     public $manufacturerId;
     public $manufacturerName;
 
-    public function __construct(PartId $partId, $manufacturerId, $manufacturerName)
+    public function __construct(PartId $partId, ManufacturerId $manufacturerId, $manufacturerName)
     {
         $this->partId = $partId;
         $this->manufacturerId = $manufacturerId;

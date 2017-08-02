@@ -19,13 +19,23 @@ class PartRepository extends EventSourcingRepository implements \Api\Parts\Repos
      */
     private $connection;
 
-    public function __construct(EventStore $eventStore, EventBus $eventBus, Connection $connection, array $eventStreamDecorators = []
+    public function __construct(
+        EventStore $eventStore,
+        EventBus $eventBus,
+        Connection $connection,
+        array $eventStreamDecorators = []
     )
     {
         $this->eventStore = $eventStore;
         $this->connection = $connection;
 
-        parent::__construct($eventStore, $eventBus, Part::class, new PublicConstructorAggregateFactory(), $eventStreamDecorators);
+        parent::__construct(
+            $eventStore,
+            $eventBus,
+            Part::class,
+            new PublicConstructorAggregateFactory(),
+            $eventStreamDecorators
+        );
     }
 
     public function append($id, DomainEventStream $eventStream)
@@ -38,7 +48,10 @@ class PartRepository extends EventSourcingRepository implements \Api\Parts\Repos
      */
     public function getStreamIds()
     {
-        $statement = $this->connection->prepare('SELECT DISTINCT uuid FROM ' . config('broadway.event-store.table'));
+        $statement = $this->connection->prepare(
+            'SELECT DISTINCT uuid FROM ' . config('broadway.event-store.table')
+        );
+        
         $statement->execute();
 
         return array_map(

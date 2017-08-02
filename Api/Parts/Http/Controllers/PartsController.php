@@ -47,7 +47,6 @@ class PartsController extends Controller
     public function index()
     {
         $parts = $this->readModelPartRepository->findAll();
-        dd($parts);
 
         return view('parts::index', compact('parts'));
     }
