@@ -37,7 +37,11 @@ class BroadwayServiceProvider extends ServiceProvider
             $eventStore = $app[\Broadway\EventStore\EventStore::class];
             $eventBus = $app[\Broadway\EventHandling\EventBus::class];
 
-            return new MysqlPartRepository($eventStore, $eventBus, $app[\Doctrine\DBAL\Connection::class], [$app[EventStreamDecorator::class]]);
+            return new MysqlPartRepository(
+                $eventStore,
+                $eventBus,
+                $app[\Doctrine\DBAL\Connection::class],
+                [$app[EventStreamDecorator::class]]);
         });
     }
 
@@ -86,11 +90,14 @@ class BroadwayServiceProvider extends ServiceProvider
      */
     private function registerProcessors()
     {
-        $logEntryProcessor = new LogEntryProcessor();
+        //Disable processors in console mode
+        if (!$this->app->runningInConsole()) {
+            $logEntryProcessor = new LogEntryProcessor();
 
-        $this->app['laravelbroadway.event.registry']->subscribe([
-            $logEntryProcessor
-        ]);
+            $this->app['laravelbroadway.event.registry']->subscribe([
+                $logEntryProcessor
+            ]);
+        }
     }
 
     private function registerConsoleCommands()

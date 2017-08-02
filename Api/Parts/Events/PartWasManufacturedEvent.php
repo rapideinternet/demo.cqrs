@@ -24,8 +24,9 @@ class PartWasManufacturedEvent implements Serializable
     public static function deserialize(array $data)
     {
         $partId = PartId::fromString($data['partId']);
+        $manufacturerId = ManufacturerId::fromString($data['partId']);
 
-        return new self($partId, $data['manufacturerId'], $data['manufacturerName']);
+        return new self($partId, $manufacturerId, $data['manufacturerName']);
     }
 
     /**
