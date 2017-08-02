@@ -1,4 +1,4 @@
-<?php namespace Api\Parts\Repositories\Mysql;
+<?php namespace Api\Parts\Repositories\EventStore\Mysql;
 
 use Api\Parts\Entities\Part;
 use Broadway\Domain\DomainEventStream;
@@ -8,7 +8,7 @@ use Broadway\EventSourcing\EventSourcingRepository;
 use Broadway\EventStore\EventStore;
 use Doctrine\DBAL\Connection;
 
-class EventStorePartRepository extends EventSourcingRepository implements \Api\Parts\Repositories\EventStorePartRepository
+class PartRepository extends EventSourcingRepository implements \Api\Parts\Repositories\EventStore\PartRepository
 {
     /**
      * @var EventStore
@@ -19,12 +19,13 @@ class EventStorePartRepository extends EventSourcingRepository implements \Api\P
      */
     private $connection;
 
-    public function __construct(EventStore $eventStore, EventBus $eventBus, Connection $connection)
+    public function __construct(EventStore $eventStore, EventBus $eventBus, Connection $connection, array $eventStreamDecorators = []
+    )
     {
         $this->eventStore = $eventStore;
         $this->connection = $connection;
 
-        parent::__construct($eventStore, $eventBus, Part::class, new PublicConstructorAggregateFactory());
+        parent::__construct($eventStore, $eventBus, Part::class, new PublicConstructorAggregateFactory(), $eventStreamDecorators);
     }
 
     public function append($id, DomainEventStream $eventStream)

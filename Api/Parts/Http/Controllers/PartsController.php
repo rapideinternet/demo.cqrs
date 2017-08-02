@@ -5,8 +5,9 @@ use Api\Parts\Commands\RemovePartCommand;
 use Api\Parts\Commands\RenameManufacturerForPartCommand;
 use Api\Parts\Entities\ManufacturerId;
 use Api\Parts\Entities\PartId;
-use Api\Parts\Repositories\ReadModelPartRepository;
+use Api\Parts\Repositories\ReadModel\PartRepository as ReadModelPartRepository;
 use Broadway\CommandHandling\CommandBus;
+use Broadway\EventHandling\SimpleEventBus;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
@@ -89,5 +90,20 @@ class PartsController extends Controller
         $this->commandBus->dispatch($command);
 
         return Redirect::route('parts.index')->with('success', 'Part successfully deleted.');
+    }
+
+    public function replay(){
+        $eventBus = new SimpleEventBus();
+
+        $events = [];
+        foreach ($connection->fetchAll('SELECT * FROM events') as $event) {
+            $events[] = new Broadway\Domain\DomainMessage(
+                $event['uuid'],
+                $event['playhead'],
+                $metadataSerializer->deserialize(json_decode($event['metadata'], true)),
+                $payloadSerializer->deserialize(json_decode($event['payload'], true)),
+                Broadway\Domain\DateTime::fromString($event['recorded_on'])
+            );
+        }
     }
 }

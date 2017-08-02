@@ -1,12 +1,11 @@
-<?php namespace Api\Parts\Repositories\Elasticsearch;
+<?php namespace Api\Parts\Repositories\ReadModel\Elasticsearch;
 
 use Api\Parts\ReadModel\PartsThatWereManufactured;
-use Api\Parts\Repositories\ReadModelPartRepository;
 use Broadway\ReadModel\ElasticSearch\ElasticSearchRepository;
 use Broadway\Serializer\Serializer;
 use Elasticsearch\Client;
 
-class ElasticSearchReadModelPartRepository extends ElasticSearchRepository implements ReadModelPartRepository
+class PartRepository extends ElasticSearchRepository implements \Api\Parts\Repositories\ReadModel\PartRepository
 {
     public function __construct(
         Client $client,

@@ -4,7 +4,7 @@ use Api\Parts\Commands\ManufacturePartCommand;
 use Api\Parts\Commands\RemovePartCommand;
 use Api\Parts\Commands\RenameManufacturerForPartCommand;
 use Api\Parts\Entities\Part;
-use Api\Parts\Repositories\EventStorePartRepository;
+use Api\Parts\Repositories\EventStore\PartRepository as EventStorePartRepository;
 use Broadway\CommandHandling\SimpleCommandHandler;
 
 class PartCommandHandler extends SimpleCommandHandler

@@ -1,10 +1,9 @@
-<?php namespace Api\Parts\Repositories;
-
+<?php namespace Api\Parts\Repositories\EventStore;
 
 use Broadway\Domain\DomainEventStream;
 use Broadway\Repository\Repository;
 
-interface EventStorePartRepository extends Repository
+interface PartRepository extends Repository
 {
     /**
      * @param $id

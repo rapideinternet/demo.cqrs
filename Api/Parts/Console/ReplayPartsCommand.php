@@ -1,6 +1,6 @@
 <?php namespace Api\Parts\Console;
 
-use Api\Parts\Repositories\EventStorePartRepository;
+use Api\Parts\Repositories\EventStore\PartRepository;
 use Broadway\Domain\DateTime;
 use Broadway\Domain\DomainEventStream;
 use Broadway\EventHandling\EventBus;
@@ -26,7 +26,7 @@ class ReplayPartsCommand extends Command
      */
     protected $description = 'Rebuild the parts until a specific date. Commands needs to be edited.';
     /**
-     * @var EventStorePartRepository
+     * @var PartRepository
      */
     private $eventStore;
     private $eventBuffer = [];
@@ -36,7 +36,7 @@ class ReplayPartsCommand extends Command
      */
     private $eventBus;
 
-    public function __construct(EventStorePartRepository $eventStore, EventBus $eventBus)
+    public function __construct(PartRepository $eventStore, EventBus $eventBus)
     {
         parent::__construct();
 

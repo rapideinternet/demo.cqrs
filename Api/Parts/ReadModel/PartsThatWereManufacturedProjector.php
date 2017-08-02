@@ -3,8 +3,9 @@
 use Api\Parts\Events\PartManufacturerWasRenamedEvent;
 use Api\Parts\Events\PartWasManufacturedEvent;
 use Api\Parts\Events\PartWasRemovedEvent;
-use Api\Parts\Repositories\ReadModelPartRepository;
+use Api\Parts\Repositories\ReadModel\PartRepository as ElasticSearchPartRepository;
 use Assert\Assertion;
+use Broadway\Domain\DomainMessage;
 use Broadway\ReadModel\Projector;
 use Broadway\Repository\Repository;
 
@@ -15,7 +16,7 @@ class PartsThatWereManufacturedProjector extends Projector
      */
     private $repository;
 
-    public function __construct(ReadModelPartRepository $repository)
+    public function __construct(ElasticSearchPartRepository $repository)
     {
         $this->repository = $repository;
     }
@@ -31,8 +32,10 @@ class PartsThatWereManufacturedProjector extends Projector
         $this->repository->save($readModel);
     }
 
-    public function applyPartManufacturerWasRenamedEvent(PartManufacturerWasRenamedEvent $event)
+    public function applyPartManufacturerWasRenamedEvent(PartManufacturerWasRenamedEvent $event, DomainMessage $domainMessage)
     {
+        $metaData = $domainMessage->getMetadata()->serialize();
+
         $readModel = $this->getReadModel($event->partId);
 
         $readModel->renameManufacturer($event->manufacturerName);

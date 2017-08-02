@@ -4,10 +4,14 @@
   "description": "",
   "keywords": [],
   "active": 1,
-  "priority": 0,
+  "order": 0,
   "providers": [
-    "Api\\Parts\\PartServiceProvider"
+    "Api\\Parts\\PartServiceProvider",
+    "Api\\Parts\\BroadwayServiceProvider"
   ],
+  "aliases": {},
   "files": [
-  ]
+    "start.php"
+  ],
+  "requires": []
 }
