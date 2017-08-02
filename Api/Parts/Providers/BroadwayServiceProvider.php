@@ -3,6 +3,7 @@
 use Api\Parts\Commands\Handlers\PartCommandHandler;
 use Api\Parts\Console\ReplayPartsCommand;
 use Api\Parts\Metadata\IpEnricher;
+use Api\Parts\Processors\LogEntryProcessor;
 use Api\Parts\ReadModel\PartsThatWereManufacturedProjector;
 use Api\Parts\Repositories\EventStore\Mysql\PartRepository as MysqlPartRepository;
 use Api\Parts\Repositories\ReadModel\Elasticsearch\PartRepository as ElasticSearchPartRepository;
@@ -18,12 +19,13 @@ class BroadwayServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->registerEnrichers();
         $this->bindEventSourcedRepositories();
         $this->bindReadModelRepositories();
         $this->registerCommandSubscribers();
         $this->registerEventSubscribers();
+        $this->registerProcessors();
         $this->registerConsoleCommands();
-        $this->registerEnrichers();
     }
 
     /**
@@ -34,8 +36,6 @@ class BroadwayServiceProvider extends ServiceProvider
         $this->app->bind(\Api\Parts\Repositories\EventStore\PartRepository::class, function ($app) {
             $eventStore = $app[\Broadway\EventStore\EventStore::class];
             $eventBus = $app[\Broadway\EventHandling\EventBus::class];
-
-            $this->registerEnrichers();
 
             return new MysqlPartRepository($eventStore, $eventBus, $app[\Doctrine\DBAL\Connection::class], [$app[EventStreamDecorator::class]]);
         });
@@ -78,6 +78,18 @@ class BroadwayServiceProvider extends ServiceProvider
 
         $this->app['laravelbroadway.event.registry']->subscribe([
             $partsThatWereManfacturedProjector
+        ]);
+    }
+
+    /**
+     * Register the event listeners on the event bus
+     */
+    private function registerProcessors()
+    {
+        $logEntryProcessor = new LogEntryProcessor();
+
+        $this->app['laravelbroadway.event.registry']->subscribe([
+            $logEntryProcessor
         ]);
     }
 
